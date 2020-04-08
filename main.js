@@ -78,5 +78,5 @@ class IpAddress {
   // data as the second argument to the callback function.
   return callback(firstIpAddress, callbackError);
 }
-module.exports = new IpAddress;
 }
+module.exports = new IpAddress;
