@@ -15,6 +15,8 @@ const path = require('path');
  */
 const { getIpv4MappedIpv6Address } = require(path.join(__dirname, 'ipv6.js'));
 
+
+
 class IpAddress {
   constructor() {
     // IAP's global log object is used to output errors, warnings, and other
@@ -24,14 +26,6 @@ class IpAddress {
     // under Documentation -> Developer Guides -> Log Class Guide
     log.info('Starting the IpAddress product.');
   }
-  /*
-  Import the ip-cidr npm package.
-  See https://www.npmjs.com/package/ip-cidr
-  The ip-cidr package exports a class.
-  Assign the class definition to variable IPCIDR.
-*/
-const IPCIDR = require('ip-cidr');
-
     /**
     * Calculate and return the first host IP address from a CIDR subnet.
     * @param {string} cidrStr - The IPv4 subnet expressed
@@ -42,7 +36,10 @@ const IPCIDR = require('ip-cidr');
     getFirstIpAddress(cidrStr, callback) {
 
     // Initialize return arguments for callback
-    let firstIpAddress = null;
+    let firstIpAddress = {
+        ipv4: null,
+        ipv6: null
+    };
     let callbackError = null;
 
     // Instantiate an object from the imported class and assign the instance to variable cidr.
@@ -63,6 +60,7 @@ const IPCIDR = require('ip-cidr');
         // If the passed CIDR is valid, call the object's toArray() method.
         // Notice the destructering assignment syntax to get the value of the first array's element.
         [firstIpAddress] = cidr.toArray(options);
+        firstIpAddress.ipv6 = getIpv4MappedIpv6Address(firstIpAddress.ipv4);
     }
     // Call the passed callback function.
     // Node.js convention is to pass error data as the first argument to a callback.
@@ -73,3 +71,4 @@ const IPCIDR = require('ip-cidr');
 }
 
 module.exports = new IpAddress;
+
