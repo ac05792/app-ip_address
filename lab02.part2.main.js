@@ -38,17 +38,26 @@ function getFirstIpAddress(cidrStr, callback) {
     // Notice the destructering assignment syntax to get the value of the first array's element.
     [firstIpAddress] = cidr.toArray(options);
   }
+
+  // Calling the getIpv4MappedIpv6Address() to calculate the IPv4-mapped IPv6 address for the passed IPv4 address.
+  let ipv4MappedIpv6 = null;
+    if (!cidr.isValid()) {
+      ipv4MappedIpv6 = (`\x1b[32m"IPv4"\x1b[37m:${firstIpAddress},\x1b[32m"IPv6"\x1b[37m:${ipv4MappedIpv6}`)
+    } else {
+      ipv4MappedIpv6 = (`\x1b[32m"IPv4":"${firstIpAddress}"\x1b[37m,\x1b[32m"IPv6":"` + getIpv4MappedIpv6Address(firstIpAddress) +'"\x1b[37m');
+    }
+  
   // Call the passed callback function.
   // Node.js convention is to pass error data as the first argument to a callback.
   // The IAP convention is to pass returned data as the first argument and error
   // data as the second argument to the callback function.
-  return callback(firstIpAddress, callbackError);
+  return callback(ipv4MappedIpv6, callbackError);
 }
 
 /**
  * Calculates an IPv4-mapped IPv6 address.
  * @param {string} ipv4 - An IPv4 address in dotted-quad format.
- * @return {*} (ipv6Address) - An IPv6 address string or null if a run-time problem was detected.
+ * @return {*} (ipv6Address) - An IPv6 address string or null.
  */
 function getIpv4MappedIpv6Address(ipv4) {
 
@@ -94,6 +103,10 @@ function getIpv4MappedIpv6Address(ipv4) {
   return ipv6Address;
 }
 
+/*
+  This section is used to test function and log any errors.
+  We will make several positive and negative tests.
+*/
 function main() {
   // Create some test data for getFirstIpAddress(), both valid and invalid.
   let sampleCidrs = ['172.16.10.0/24', '172.16.10.0 255.255.255.0', '172.16.10.128/25', '192.168.1.216/30'];
@@ -113,7 +126,7 @@ function main() {
       if (error) {
         console.error(`  Error returned from GET request: ${error}`);
       }
-      console.log(`  Response returned from GET request: ${data}`);
+      console.log(`  Response returned from GET request: ${data} `);
     });
   }
   // Iterate over sampleIpv4s and pass the element's value to getIpv4MappedIpv6Address().
