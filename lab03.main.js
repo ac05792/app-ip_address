@@ -59,9 +59,9 @@ function getFirstIpAddress(cidrStr, callback) {
   // Calling the getIpv4MappedIpv6Address() to calculate the IPv4-mapped IPv6 address for the passed IPv4 address.
   let ipv4MappedIpv6 = null;
     if (!cidr.isValid()) {
-      ipv4MappedIpv6 = (`\x1b[32m"IPv4"\x1b[37m:${firstIpAddress},\x1b[32m"IPv6"\x1b[37m:${ipv4MappedIpv6}`)
+      ipv4MappedIpv6 = (`{\x1b[32m"IPv4"\x1b[37m:${firstIpAddress},\x1b[32m"IPv6"\x1b[37m:${ipv4MappedIpv6}}`)
     } else {
-      ipv4MappedIpv6 = (`\x1b[32m"IPv4":"${firstIpAddress}"\x1b[37m,\x1b[32m"IPv6":"` + getIpv4MappedIpv6Address(firstIpAddress) +'"\x1b[37m');
+      ipv4MappedIpv6 = (`{\x1b[32m"IPv4":"${firstIpAddress}"\x1b[37m,\x1b[32m"IPv6":"` + getIpv4MappedIpv6Address(firstIpAddress) +'"\x1b[37m}');
     }
   
   // Call the passed callback function.
